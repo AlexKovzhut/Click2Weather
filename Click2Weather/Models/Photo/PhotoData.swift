@@ -1,6 +1,6 @@
 //
 //  PhotoData.swift
-//  YourWeather
+//  Click2Weather
 //
 //  Created by Alexander Kovzhut on 02.01.2022.
 //

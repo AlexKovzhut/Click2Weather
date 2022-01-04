@@ -1,6 +1,6 @@
 //
 //  WeatherNetworkLayer.swift
-//  YourWeather
+//  Click2Weather
 //
 //  Created by Alexander Kovzhut on 04.01.2022.
 //
