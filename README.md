@@ -1,4 +1,4 @@
-# Click2Weather 🌈
+# Click2Weather ☔️
 
 > Simple weather app like Yahoo Weather for iOS
 
