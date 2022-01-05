@@ -2,8 +2,11 @@
 
 > Simple weather app like Yahoo Weather for iOS
 
-Without ~~Storyboards~~, completely programatically
+Completely programatically
+Get GPS data by CoreLocation
+Request to Openweathermap and Unsplash
+Implemented Delegation, Singleton Design Pattern
 
 >Preview
 
-Click2Weather/Resources/exapleV1.png
+<img src="Click2Weather/Resources/exapleV1.png">
