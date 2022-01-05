@@ -14,8 +14,10 @@ enum PhotoServiceError: Error {
 class PhotoNetworkLayer {
     static let shared = PhotoNetworkLayer()
     
+    let query = "weather"
+    
     func fetchData(completion: @escaping ((Result<[PhotoData], Error>) -> Void)) {
-        let url = URL(string: "https://api.unsplash.com/photos/random?client_id=F8qFf42dxGvig_oG30JrkfG9XqFct5qeAm6Nvv_D6KY&query=London&count=1&orientation=portrait")!
+        let url = URL(string: "https://api.unsplash.com/photos/random?client_id=F8qFf42dxGvig_oG30JrkfG9XqFct5qeAm6Nvv_D6KY&query=\(query)&count=1")!
         
         let task = URLSession.shared.dataTask(with: url) { data, responce, error in
             if let error = error {

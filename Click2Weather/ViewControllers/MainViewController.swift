@@ -18,6 +18,8 @@ class MainViewController: UIViewController {
     private var backgroundImage = UIImageView()
     private let activityIndicator = UIActivityIndicatorView()
 
+    private var locationLabel = UILabel()
+    private let currentTimeLabel = UILabel()
     private let conditionImageView = UIImageView()
     private let temperaturelabel = UILabel()
     private let tempMaxMinlabel = UILabel()
@@ -44,10 +46,6 @@ class MainViewController: UIViewController {
         let addViewController = AddViewController()
         navigationController?.pushViewController(addViewController, animated: true)
     }
-    
-    @objc func currentLocationPressedButton() {
-        print(#function)
-    }
 }
 
 extension MainViewController {
@@ -60,24 +58,35 @@ extension MainViewController {
     }
     
     private func setupNavigationBar() {
-        let titleLabel = UILabel()
-        let userPageButtonItem = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(userPagePressedButton))
-        
-        let currentLocationButtonItem = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(currentLocationPressedButton))
-        
-        let addLocationButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addLocationPressedButton))
-                
-        titleLabel.text = "London, UK"
-        titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
-        titleLabel.textColor = UIColor.white
-                
-        userPageButtonItem.tintColor = .white
+        let currentLocationButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(currentLocationPressedButton))
         currentLocationButtonItem.tintColor = .white
+        let addLocationButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addLocationPressedButton))
         addLocationButtonItem.tintColor = .white
-                
-        navigationItem.leftBarButtonItem = userPageButtonItem
+        
+        let titleStackView: UIStackView = {
+            let locationLabel = locationLabel
+            locationLabel.textAlignment = .left
+            locationLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+            locationLabel.textColor = .white
+            locationLabel.shadowColor = .black
+            locationLabel.shadowOffset = CGSize(width: 1, height: 1)
+            
+            let currentTimeLabel = currentTimeLabel
+            currentTimeLabel.textAlignment = .left
+            currentTimeLabel.text = "22:22 PM"
+            currentTimeLabel.font = UIFont.systemFont(ofSize: 19, weight: .bold)
+            currentTimeLabel.textColor = .white
+            currentTimeLabel.shadowColor = .black
+            currentTimeLabel.shadowOffset = CGSize(width: 1, height: 1)
+            
+            let stackView = UIStackView(arrangedSubviews: [locationLabel, currentTimeLabel])
+            stackView.axis = .vertical
+            
+            return stackView
+        }()
+            
+        navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: titleStackView)
         navigationItem.rightBarButtonItems = [addLocationButtonItem, currentLocationButtonItem]
-        navigationItem.titleView = titleLabel
     }
     
     private func setupStyle() {
@@ -99,7 +108,7 @@ extension MainViewController {
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         descriptionLabel.textColor = .white
         descriptionLabel.shadowColor = .black
-        tempMaxMinlabel.shadowOffset = CGSize(width: 2, height: 2)
+        descriptionLabel.shadowOffset = CGSize(width: 2, height: 2)
         descriptionLabel.font = UIFont.systemFont(ofSize: 25, weight: .bold)
         
         tempMaxMinlabel.translatesAutoresizingMaskIntoConstraints = false
@@ -107,7 +116,6 @@ extension MainViewController {
         tempMaxMinlabel.shadowColor = .black
         tempMaxMinlabel.shadowOffset = CGSize(width: 2, height: 2)
         tempMaxMinlabel.font = UIFont.systemFont(ofSize: 35, weight: .bold)
-        
         
         temperaturelabel.translatesAutoresizingMaskIntoConstraints = false
         temperaturelabel.textColor = .white
@@ -170,6 +178,7 @@ extension MainViewController {
 extension MainViewController: WeatherServiceDelegate {
     // Update UI elements
         func didFetchWeather(_ weatherService: WeatherNetworkLayer, _ weather: WeatherModel) {
+            self.locationLabel.text = "\(weather.cityName), \(weather.countryName)"
             self.conditionImageView.image = UIImage(systemName: weather.conditionName)
             self.descriptionLabel.text = "\(weather.mainDescription)"
             self.tempMaxMinlabel.text = "↑\(weather.tempMaxString)  ↓\(weather.tempMinString)"
@@ -200,6 +209,10 @@ extension MainViewController: WeatherServiceDelegate {
 }
 
 extension MainViewController: CLLocationManagerDelegate {
+    @objc func currentLocationPressedButton() {
+        locationManager.requestLocation()
+    }
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations:[CLLocation]) {
         if let location = locations.last {
             locationManager.stopUpdatingLocation()
