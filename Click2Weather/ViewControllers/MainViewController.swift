@@ -11,6 +11,8 @@ import Kingfisher
 
 class MainViewController: UIViewController {
     
+    // MARK: - Private properties
+    
     private var photoManager = PhotoNetworkLayer.shared
     private var weatherManager = WeatherNetworkLayer.shared
     private let locationManager = CLLocationManager()
@@ -27,6 +29,8 @@ class MainViewController: UIViewController {
     
     private var images = [PhotoData]()
 
+    // MARK: - UIViewController Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,6 +40,8 @@ class MainViewController: UIViewController {
         setupLayout()
         fetchPhotoData()
     }
+    
+    // MARK: - @objc methods
     
     @objc func userPagePressedButton() {
         print(#function)
@@ -47,6 +53,8 @@ class MainViewController: UIViewController {
         navigationController?.pushViewController(addViewController, animated: true)
     }
 }
+
+// MARK: - Private Methods
 
 extension MainViewController {
     private func setup() {
@@ -66,20 +74,12 @@ extension MainViewController {
         let titleStackView: UIStackView = {
             let locationLabel = locationLabel
             locationLabel.textAlignment = .left
-            locationLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+            locationLabel.font = UIFont.systemFont(ofSize: 23, weight: .bold)
             locationLabel.textColor = .white
             locationLabel.shadowColor = .black
             locationLabel.shadowOffset = CGSize(width: 1, height: 1)
             
-            let currentTimeLabel = currentTimeLabel
-            currentTimeLabel.textAlignment = .left
-            currentTimeLabel.text = "22:22 PM"
-            currentTimeLabel.font = UIFont.systemFont(ofSize: 19, weight: .bold)
-            currentTimeLabel.textColor = .white
-            currentTimeLabel.shadowColor = .black
-            currentTimeLabel.shadowOffset = CGSize(width: 1, height: 1)
-            
-            let stackView = UIStackView(arrangedSubviews: [locationLabel, currentTimeLabel])
+            let stackView = UIStackView(arrangedSubviews: [locationLabel])
             stackView.axis = .vertical
             
             return stackView
@@ -123,6 +123,7 @@ extension MainViewController {
         temperaturelabel.shadowOffset = CGSize(width: 2, height: 2)
         temperaturelabel.font = UIFont.systemFont(ofSize: 120, weight: .bold)
     }
+    
     
     private func setupLayout() {
         view.addSubview(backgroundImage)
@@ -175,6 +176,8 @@ extension MainViewController {
     }
 }
 
+//MARK: - WeatherServiceDelegate
+
 extension MainViewController: WeatherServiceDelegate {
     // Update UI elements
         func didFetchWeather(_ weatherService: WeatherNetworkLayer, _ weather: WeatherModel) {
@@ -207,6 +210,8 @@ extension MainViewController: WeatherServiceDelegate {
             self.present(alert, animated: true, completion: nil)
         }
 }
+
+// MARK: - CLLocationManagerDelegate
 
 extension MainViewController: CLLocationManagerDelegate {
     @objc func currentLocationPressedButton() {
