@@ -6,7 +6,7 @@
 + Get GPS data by CoreLocation
 + Request to Openweathermap and Unsplash
 + Implemented Delegation, Singleton Design Pattern
-+ Kingfisher for download and cashe images
++ Kingfisher for download and cache images
 
 >Preview
 
